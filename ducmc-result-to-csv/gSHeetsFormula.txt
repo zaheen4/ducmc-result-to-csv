@@ -1,0 +1,18 @@
+function moveNonAdjacentRows() {
+  // Configuration: specify rows and destination column
+  const rowsToMove = [7, 10, 15]; // List of rows to move
+  const destinationColumn = 2; // Destination column number (1-based, e.g., column E = 5)
+
+  // Get the active sheet
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  // Loop through the rows and move them
+  rowsToMove.forEach(rowNumber => {
+    const rowData = sheet.getRange(rowNumber, 1, 1, sheet.getLastColumn()).getValues();
+    sheet.getRange(rowNumber, 1, 1, sheet.getLastColumn()).clear(); // Clear the original row
+    sheet.getRange(rowNumber, destinationColumn, 1, rowData[0].length).setValues(rowData);
+  });
+
+  SpreadsheetApp.flush();
+  SpreadsheetApp.getUi().alert('Rows moved successfully!');
+}
