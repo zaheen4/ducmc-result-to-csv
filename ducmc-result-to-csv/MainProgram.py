@@ -8,7 +8,6 @@ import csv
 from selenium.webdriver.firefox.options import Options
 
 
-
 ######## edit form data
 
 start_regi = 710     # CSE(21-22) for now
@@ -22,22 +21,35 @@ exam = "B.Sc. in Computer Science and Engineering 1st year 2nd Semester Examinat
 
 ######
 
-file_path = "Output/ResultFromWebsite.txt"
-csv_file_path = "Output/Results.csv"
-delim = ";"  # defines the seperator used for CSV file
+log_file_path = "ducmc-result-to-csv/Output/WebLogCurrent.txt"
+csv_file_path = "ducmc-result-to-csv/Output/Results.csv"
+delim = ";"  # custom seperator used for CSV file
 
 
-# options = Options()
-# options.add_argument("--width=576")  # Set window width
-# options.add_argument("--height=324")  # Set window height options=options
 
-driver = webdriver.Firefox()
+# Deletes old output file and writes the first row to new file
+with open(csv_file_path, mode="w", newline="", encoding="utf-8") as csvfile:
+   # writer = csv.writer(csvfile, delimiter=";")
+   # writer.writerow(data)
+   csvfile.write(f"Reg;Status;FailSubs;GPA;CGPA\n")
+
+
+# launched brower window size 
+options = Options()
+options.add_argument("--width=576")  # Set window width
+options.add_argument("--height=324")  # Set window height 
+
+driver = webdriver.Firefox(options=options)
 driver.get("https://ducmc.com/result.php")
 
 
 # Prevents the loop from running infinitely
 iteration_count = 0
-max_iteration = 240
+# set 'max_iteration' to the number of seats available in you department otherwise leave it at 240
+max_iteration = 240  
+
+
+
 
 
 # find CG of every student in dept
@@ -46,7 +58,7 @@ while (regi <= end_regi) and (iteration_count < max_iteration):
       # verifies if the site loaded 
       assert "DUCMC" in driver.title 
 
-      #time.sleep(1)
+      time.sleep(1)  # for stability, target website is slow
 
       # inputs Registration No
       registration_no = driver.find_element(By.ID, "reg_no")
@@ -58,7 +70,7 @@ while (regi <= end_regi) and (iteration_count < max_iteration):
       program_name = driver.find_element(By.ID, "pro_id")
       Select(program_name).select_by_visible_text(program)
 
-      #time.sleep(1) 
+      time.sleep(1) 
 
       # filling Session
       session_year = driver.find_element(By.ID, "sess_id")
@@ -68,7 +80,7 @@ while (regi <= end_regi) and (iteration_count < max_iteration):
       exam_name = driver.find_element(By.ID, "exam_id")
       Select(exam_name).select_by_visible_text(exam)
 
-      #time.sleep(1)
+      time.sleep(1)
 
       # clicking submit
       submit_button = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-block")
@@ -105,7 +117,7 @@ while (regi <= end_regi) and (iteration_count < max_iteration):
 
 
       ## Formatting
-      # Add an extra cell for failed subjects if it doesn't exist already
+      # Add an extra column for failed subjects if it doesn't exist already
       semicolon_count = content.count(";")
 
       if semicolon_count == 2:
@@ -118,9 +130,8 @@ while (regi <= end_regi) and (iteration_count < max_iteration):
          modified_content = content
       
 
-
       # kinda acts like a log file for real time viewing (current row)
-      with open(file_path, "w") as file:
+      with open(log_file_path, "w") as file:
          file.write(f"{regi}{delim}{modified_content}")
 
       
