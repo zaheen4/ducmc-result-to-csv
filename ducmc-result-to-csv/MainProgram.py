@@ -17,7 +17,7 @@ end_regi = 813
 regi = start_regi
 program = "B.Sc. in Computer Science and Engineering"
 session = "2021-2022"
-exam = "B.Sc. in Computer Science and Engineering 1st year 2nd Semester Examination of 2022"
+exam = "B.Sc. in Computer Science and Engineering 2nd year 1st Semester Examination of 2023"
 
 ######
 
@@ -40,7 +40,7 @@ options.add_argument("--width=576")  # Set window width
 options.add_argument("--height=324")  # Set window height 
 
 driver = webdriver.Firefox(options=options)
-driver.get("https://ducmc.com/result.php")
+driver.get("https://cmc.du.ac.bd/result.php")
 
 
 # Prevents the loop from running infinitely
