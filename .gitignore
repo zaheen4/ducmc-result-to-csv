@@ -1,0 +1,7 @@
+.venv
+tmp/
+.random.txt
+tmpUseless/
+Output/
+credentials.json
+new.py
